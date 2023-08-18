@@ -9,7 +9,6 @@ public class IncreaseInventoryDtoValidator : AbstractValidator<IncreaseInventory
     public IncreaseInventoryDtoValidator()
     {
         RuleFor(x => x.Count)
-            .NotEmpty()
-            .NotEqual((uint)0);
+            .NotEmpty();
     }
 }

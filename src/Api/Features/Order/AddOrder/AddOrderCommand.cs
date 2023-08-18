@@ -1,7 +1,6 @@
 using Api.Features.Common;
 using Api.Features.Product.Services;
 using Api.Infrastructure.Persistence;
-using FluentValidation;
 using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,25 +8,6 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Features.Order.AddOrder;
 
 public record AddOrderCommand(int ProductId, int UserId, int Count) : IRequest<OrderDto>;
-
-public class AddOrderCommandValidator : AbstractValidator<AddOrderCommand>
-{
-    private readonly AppDbContext _appDbContext;
-
-    public AddOrderCommandValidator(AppDbContext appDbContext)
-    {
-        _appDbContext = appDbContext;
-
-        RuleFor(x => x.Count)
-            .NotEmpty();
-
-        RuleFor(x => x.ProductId)
-            .NotEmpty();
-
-        RuleFor(x => x.UserId)
-            .NotEmpty();
-    }
-}
 
 public class AddOrderCommandHandler : IRequestHandler<AddOrderCommand, OrderDto>
 {

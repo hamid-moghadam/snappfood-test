@@ -26,20 +26,19 @@ public class CachedProductService : IProductService
     public async Task<ProductDto?> GetAsync(int id, CancellationToken cancellationToken)
     {
         var key = GetProductKey(id);
-        byte[]? productByteArray = null;
-        // try
-        // {
+        byte[]? productByteArray;
+        try
+        {
             productByteArray = await _distributedCache.GetAsync(key, token: cancellationToken);
-        // }
-        // catch (Exception e)
-        // {
-            // return await _productService.GetAsync(id, cancellationToken);
-        // }
+        }
+        catch (Exception e)
+        {
+            return await _productService.GetAsync(id, cancellationToken);
+        }
 
-        string productString;
         if (productByteArray != null)
         {
-            productString = Encoding.UTF8.GetString(productByteArray);
+            var productString = Encoding.UTF8.GetString(productByteArray);
             return JsonSerializer.Deserialize<ProductDto>(productString);
         }
 
@@ -61,7 +60,6 @@ public class CachedProductService : IProductService
         catch
         {
             // ignored
-            Console.WriteLine("yes");
         }
     }
 
@@ -77,7 +75,7 @@ public class CachedProductService : IProductService
 
     private async Task AddToCacheAsync(ProductDto product, CancellationToken cancellationToken)
     {
-        string key = GetProductKey(product.Id);
+        var key = GetProductKey(product.Id);
         var productString = JsonSerializer.Serialize(product);
         var productByteArray = Encoding.UTF8.GetBytes(productString);
 

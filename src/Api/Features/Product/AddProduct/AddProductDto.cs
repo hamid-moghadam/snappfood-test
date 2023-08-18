@@ -7,16 +7,12 @@ public record AddProductDto(string Title, uint Price, sbyte DiscountPercent);
 
 public class AddProductDtoValidator : AbstractValidator<AddProductDto>
 {
-    private readonly AppDbContext _context;
-
-    public AddProductDtoValidator(AppDbContext context)
+    public AddProductDtoValidator()
     {
-        _context = context;
-
         RuleFor(v => v.Title)
             .NotEmpty()
             .MaximumLength(Domain.Product.TitleMaxLength);
-        
+
         RuleFor(v => v.DiscountPercent)
             .NotNull()
             .InclusiveBetween((sbyte)0, (sbyte)100);
