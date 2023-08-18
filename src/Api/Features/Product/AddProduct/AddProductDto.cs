@@ -11,7 +11,7 @@ public class AddProductDtoValidator : AbstractValidator<AddProductDto>
     {
         RuleFor(v => v.Title)
             .NotEmpty()
-            .MaximumLength(Domain.Product.TitleMaxLength);
+            .MaximumLength(40);
 
         RuleFor(v => v.DiscountPercent)
             .NotNull()
