@@ -1,0 +1,30 @@
+services:
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning --requirepass Test123
+    ports:
+      - '6381:6379'
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    restart: always
+  api:
+      build:
+        context: .
+        dockerfile: src/Api/Dockerfile
+      ports:
+        - "5300:80"
+      environment:
+        - ConnectionStrings:AppDbContext=Server=postgres;Port=5432;Database=snappfood;User Id=postgres;Password=postgres;
+        - ConnectionStrings:AppContextTest=Server=postgres;Port=5432;Database=snappfood-test;User Id=postgres;Password=postgres;
+        - ConnectionStrings:Redis=redis:6379,password=Test123
+      depends_on:
+        - postgres
+        - redis
