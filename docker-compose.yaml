@@ -16,6 +16,7 @@ services:
       - "5433:5432"
     restart: always
   api:
+      container_name: api
       build:
         context: .
         dockerfile: src/Api/Dockerfile
