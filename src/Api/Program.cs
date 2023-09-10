@@ -43,11 +43,8 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.Decorate<IProductService, CachedProductService>();
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.ConfigureExceptionHandler();
 
